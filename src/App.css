@@ -7,6 +7,12 @@
   pointer-events: none;
 }
 
+.field-value {
+  width: 950px; 
+  border: 1px solid #000000;  
+  word-wrap: break-word;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
