@@ -1,14 +1,15 @@
-import logo from './logo.svg';
 import './App.css';
+import { StrictMode } from "react";
 import FileUploadPage from './upload.js'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <FileUploadPage />
-      </header>
+    <StrictMode>
+    <div className="container">
+      <div className="header">Legal AI</div>  
+      <FileUploadPage />
     </div>
+    </StrictMode>
   );
 }
 

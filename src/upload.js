@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 
 var PDF_EXTRACT_URL = "http://localhost:5234/meta_extract_pdf"
 
@@ -12,6 +13,9 @@ function FileUploadPage(){
     const [parties, setParties] = useState();
 	const [isFilePicked, setIsFilePicked] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [pageNumber, setPageNumber] = useState(1);
+    const [pdfS3Url, setPdfS3Url] = useState();
+
     
 	const changeHandler = (event) => {
 		setSelectedFile(event.target.files[0]);
@@ -38,6 +42,7 @@ function FileUploadPage(){
                 setAgreementDate(result.metadata.agreement_date)
                 setEffectiveDate(result.metadata.effective_date)
                 setGoverningLaw(result.metadata.governing_law)
+                setPdfS3Url(result.metadata.pdf_url)
                 setIsProcessing(false)
 			})
 			.catch((error) => {
@@ -45,33 +50,48 @@ function FileUploadPage(){
 			});
 	};
 
-    return(
-        <div>
-            <input type="file" name="file" onChange={changeHandler} />
-            <button onClick={handleSubmission}>Submit</button>
-                 {isFilePicked ? (
-                     <div>
-                         <p>Filename: {selectedFile.name}</p>
-                     </div>
-                 ) : (
-                     <p>Select a file to show details</p>
-                 )}
-                {metadata ? (
-                    <div class="field-value">
-                         Document Name: {documentName}<br/> 
-                         Parties: {parties}<br/> 
-                         Agreement Date: {agreementDate}<br/> 
-                         Effective Date: {effectiveDate}<br/> 
-                         Governing Law: {governingLaw}<br/> 
-                         </div>
-                 ) : (
-                    <div></div>
-                 )}      
-                 {isProcessing ? (
-                     <div>Processing...</div>
-                 ) : (<div></div>)
-                 }          
+    return(    
+        <>
+        <div className="file-input">                
+        <p>Select a file</p>
+        <input type="file" name="file" onChange={changeHandler} />
+        <button onClick={handleSubmission}>Submit</button>
+        {metadata ? (
+            <div className="fields">
+                {/* Document Name: {documentName}
+                Parties: {parties} */}
+                <ul>
+                <li>Document Name: {documentName}</li>
+                <li>Parties: {parties}</li>
+                <li>Agreement Date: {agreementDate}</li>
+                <li>Effective Date: {effectiveDate}</li>
+                <li>Governing Law: {governingLaw}</li>
+                </ul>
             </div>
+        ) : (
+            <></>
+        )}  
+        {/* {isProcessing ? (
+            <div >Processing...</div>
+        ) : (<div></div>)
+        }   */}
+        </div>        
+            {pdfS3Url ? (
+                <div className="pdf">
+                    <Document
+                        file={pdfS3Url}
+                    >
+                        <Page pageNumber={pageNumber}/>
+                    </Document>
+                    <button onClick={() => setPageNumber(pageNumber+1)}>
+                        Next page
+                    </button>
+                </div>
+            ) : (
+                <></>
+            )
+            }
+    </>
     )
 
 }
