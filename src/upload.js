@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 
-var PDF_EXTRACT_URL = "http://localhost:5234/meta_extract_pdf"
+//var PDF_EXTRACT_URL = "http://localhost:5234/meta_extract_pdf"
+var PDF_EXTRACT_URL = "http://legalaiapi-env.eba-rqit6msf.us-west-2.elasticbeanstalk.com:5234/meta_extract_pdf"
 
 function FileUploadPage(){
 	const [selectedFile, setSelectedFile] = useState();
